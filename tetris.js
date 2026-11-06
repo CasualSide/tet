@@ -1,8 +1,8 @@
-export const W = 10, H = 20;
-export const COLORS = ['', '#22d3ee', '#facc15', '#a855f7', '#22c55e', '#ef4444', '#3b82f6', '#f97316', '#64748b'];
+const W = 10, H = 20;
+const COLORS = ['', '#22d3ee', '#facc15', '#a855f7', '#22c55e', '#ef4444', '#3b82f6', '#f97316', '#64748b'];
 // piece ids 1..7 = I O T S Z J L; 8 = garbage
 const SHAPES = ['0000/1111/0000/0000', '11/11', '010/111/000', '011/110/000', '110/011/000', '100/111/000', '001/111/000'];
-export const shape = id => SHAPES[id - 1].split('/').map(r => [...r].map(c => +c && id));
+const shape = id => SHAPES[id - 1].split('/').map(r => [...r].map(c => +c && id));
 const rot = (m, d) => d > 0
   ? m[0].map((_, x) => m.map(r => r[x]).reverse())
   : m[0].map((_, x) => m.map(r => r[r.length - 1 - x]));
@@ -17,7 +17,7 @@ function rng(a) {
   };
 }
 
-export class Game {
+class Game {
   constructor(seed, emit) {
     this.rand = rng(seed); this.emit = emit; this.bag = []; this.queue = [];
     this.board = Array.from({ length: H }, () => Array(W).fill(0));
