@@ -3,7 +3,7 @@ const PREFIX = 'p2p-tetris-';
 const CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 const OPTS = { config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478' }] } };
 
-export class Net {
+class Net {
   constructor(h) { this.h = h; this.conn = null; this.peer = null; this.isHost = false; }
   host() {
     this.isHost = true;
