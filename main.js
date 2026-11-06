@@ -1,5 +1,3 @@
-import { Game, W, H, COLORS, shape } from './tetris.js';
-import { Net } from './net.js';
 
 const $ = s => document.querySelector(s);
 const me = $('#me').getContext('2d'), opp = $('#opp').getContext('2d'), side = $('#side').getContext('2d');
@@ -7,7 +5,7 @@ const DAS = 170, ARR = 45;
 let game = null, net = null, oppBoard = null, over = false, wins = [0, 0];
 const held = {};
 
-const status = t => ($('#status').textContent = t);
+const setStatus = t => ($('#status').textContent = t);
 const show = id => { $('#menu').hidden = id !== 'menu'; $('#play').hidden = id !== 'play'; };
 function overlay(text, label, fn) {
   $('#msg').textContent = text;
@@ -51,7 +49,7 @@ function connect() {
   net = new Net({
     ready: code => {
       $('#share').value = `${location.origin}${location.pathname}?room=${code}`;
-      $('#room').hidden = false; status(`Room ${code} is open. Waiting for your opponent…`);
+      $('#room').hidden = false; setStatus(`Room ${code} is open. Waiting for your opponent…`);
     },
     open: () => {
       show('play'); wins = [0, 0];
@@ -59,14 +57,14 @@ function connect() {
     },
     data: onData,
     close: () => { if (game) game.dead = true; show('play'); overlay('Your opponent left.', 'Back to menu', () => (location.href = location.pathname)); },
-    error: e => status(e.type === 'peer-unavailable' ? 'Room not found. Check the code and try again.' : `Connection problem (${e.type}). Try again.`),
+    error: e => setStatus(e.type === 'peer-unavailable' ? 'Room not found. Check the code and try again.' : `Connection problem (${e.type}). Try again.`),
   });
   return net;
 }
-const join = code => { if (code.trim()) { status('Connecting…'); connect().join(code); } };
+const join = code => { if (code.trim()) { setStatus('Connecting…'); connect().join(code); } };
 
 $('#solo').onclick = () => startGame(Math.random() * 2 ** 32 >>> 0);
-$('#create').onclick = () => { status('Creating room…'); connect().host(); };
+$('#create').onclick = () => { setStatus('Creating room…'); connect().host(); };
 $('#join').onclick = () => join($('#code').value);
 $('#code').onkeydown = e => e.key === 'Enter' && join($('#code').value);
 $('#copy').onclick = async () => { try { await navigator.clipboard.writeText($('#share').value); $('#copy').textContent = 'Copied'; } catch { $('#share').select(); } };
